@@ -78,7 +78,23 @@ function calculate() {
     }
 }
 
+function deleteLast() {
+    // Jika ekspresi hanya berisi angka 0 (awal kalkulator), jangan hapus angka 0
+    if (currentExpression === "0") {
+        return;
+    }
 
+    // Jika ekspresi lebih dari satu karakter, hapus karakter terakhir
+    currentExpression = currentExpression.slice(0, -1);
+
+    // Jika ekspresi kosong setelah penghapusan, set tampilan menjadi "0"
+    if (currentExpression === "") {
+        currentExpression = "0";
+    }
+
+    // Memperbarui tampilan kalkulator
+    resultDiv.innerText = currentExpression;
+}
 
 // Fungsi menghapus segala input
 function clearDisplay() {
@@ -88,21 +104,3 @@ function clearDisplay() {
     lastInputIsOperator = false;
 }
 
-function showFloatingBalloon(text) {
-    // Buat elemen balon baru
-    const balloon = document.createElement('div');
-    balloon.classList.add('balon');
-    balloon.textContent = text;
-
-    // Tentukan posisi balon di dekat kalkulator (misalnya di tengah layar)
-    balloon.style.left = `${window.innerWidth / 2}px`;
-    balloon.style.top = `${window.innerHeight / 2}px`;
-
-    // Tambahkan balon ke dalam body
-    document.body.appendChild(balloon);
-
-    // Hapus balon setelah animasi selesai
-    setTimeout(() => {
-        balloon.remove();
-    }, 1500); // Sesuai dengan durasi animasi
-}
