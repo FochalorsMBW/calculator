@@ -51,25 +51,27 @@ function appendParenthesis(parenthesis) {
 
 // Fungsi Faktorial
 function calculateFactorial() {
+    // Menangani ekspresi faktorial
     const number = parseInt(currentExpression);
-    if (currentExpression === "0") {
-        return;
-    }
-
+    
+    // Cek apakah input valid
     if (isNaN(number) || number < 0) {
         resultDiv.innerText = "Error";
-        currentExpression = "Error"; // Menandakan error
-        return;
+        return; // Jika tidak valid, tampilkan error
     }
 
+    // Hitung faktorial
     let factorialResult = 1;
     for (let i = 1; i <= number; i++) {
         factorialResult *= i;
     }
 
+    // Update ekspresi dengan hasil faktorial
     currentExpression = factorialResult.toString();
     resultDiv.innerText = currentExpression;
+    lastInputIsOperator = false; // Pastikan setelah faktorial, bukan operator
 }
+
 
 // Fungsi Kalkulasi (Menjumlahkan segala input dan operand)
 function calculate() {
@@ -80,8 +82,18 @@ function calculate() {
     }
 
     try {
+        // Menangani faktorial: mencari angka yang diikuti dengan tanda "!" (faktorial)
+        let expression = currentExpression.replace(/\d+(?=!)/g, (match) => {
+            const number = parseInt(match);
+            let factorialResult = 1;
+            for (let i = 1; i <= number; i++) {
+                factorialResult *= i;
+            }
+            return factorialResult;
+        });
+
         // Mengganti ** menjadi ^ untuk kompatibilitas pangkat
-        let expression = currentExpression.replace(/\^/g, "**");
+        expression = expression.replace(/\^/g, "**");
 
         // Menambahkan tutup kurung otomatis jika ada kurung buka
         while (openParenthesisCount > 0) {
@@ -89,7 +101,7 @@ function calculate() {
             openParenthesisCount--;
         }
 
-        // Evaluasi ekspresi
+        // Evaluasi ekspresi setelah faktorial dihitung
         const result = eval(expression);
         
         // Update tampilan hasil
