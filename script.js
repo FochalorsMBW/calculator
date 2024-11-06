@@ -4,7 +4,7 @@ const expressionDiv = document.getElementById('expression');
 const resultDiv = document.getElementById('result');
 let currentExpression = "";
 
-// Fungsi menambahkan angka atau value
+// Fungsi menambah angka atau value
 function appendToDisplay(value) {
     // Jika ekspresi saat ini adalah "0" (awal tampilan) dan bukan error, ganti dengan input pertama
     if (currentExpression === "0" || currentExpression === "Error") {
@@ -57,7 +57,10 @@ function calculateFactorial() {
     // Cek apakah input valid
     if (isNaN(number) || number < 0) {
         resultDiv.innerText = "Error";
-        return; // Jika tidak valid, tampilkan error
+
+        currentExpression = "0";
+        lastInputIsOperator = false;
+        return;
     }
 
     // Hitung faktorial
@@ -66,23 +69,20 @@ function calculateFactorial() {
         factorialResult *= i;
     }
 
-    // Update ekspresi dengan hasil faktorial
     currentExpression = factorialResult.toString();
     resultDiv.innerText = currentExpression;
-    lastInputIsOperator = false; // Pastikan setelah faktorial, bukan operator
+    lastInputIsOperator = false; 
 }
 
 
-// Fungsi Kalkulasi (Menjumlahkan segala input dan operand)
+// Fungsi Kalkulasi
 function calculate() {
-    // Jika ekspresi hanya berisi "0", langsung set hasilnya tanpa evaluasi
     if (currentExpression === "0") {
         resultDiv.innerText = currentExpression;
-        return; // Tidak lanjut ke evaluasi kalkulasi
+        return;
     }
 
     try {
-        // Menangani faktorial: mencari angka yang diikuti dengan tanda "!" (faktorial)
         let expression = currentExpression.replace(/\d+(?=!)/g, (match) => {
             const number = parseInt(match);
             let factorialResult = 1;
@@ -92,16 +92,16 @@ function calculate() {
             return factorialResult;
         });
 
-        // Mengganti ** menjadi ^ untuk kompatibilitas pangkat
+        // Mengganti ^ dengan ** untuk kompatibilitas kalkulasi perpangkatan
         expression = expression.replace(/\^/g, "**");
 
-        // Menambahkan tutup kurung otomatis jika ada kurung buka
+        // Menambahkan kurung tutup otomatis jika ada kurung buka yang belum ditutup
         while (openParenthesisCount > 0) {
             expression += ")";
             openParenthesisCount--;
         }
 
-        // Evaluasi ekspresi setelah faktorial dihitung
+        // Evaluasi ekspresi setelah semua faktor dan operand dihitung
         const result = eval(expression);
         
         // Update tampilan hasil
@@ -112,8 +112,9 @@ function calculate() {
         currentExpression = result.toString();
         lastInputIsOperator = false; // Reset status operator
     } catch (error) {
-        // Tangani error jika ekspresi tidak valid
         resultDiv.innerText = "Error";
+        currentExpression = "0";
+        lastInputIsOperator = false;
     }
 }
 
