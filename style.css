@@ -80,7 +80,7 @@ button{
     padding: 5px;
     height: 8vh;
     background-color: rgba(127, 191, 255, 0.303);
-    border-radius: 5px;
+    border-radius: 50px;
     margin: 8px;
     background-color: rgb(255, 255, 255);
     cursor: pointer;
