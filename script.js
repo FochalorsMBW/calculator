@@ -6,11 +6,14 @@ let currentExpression = "";
 
 //Fungsi menambahkan angka atau value
 function appendToDisplay(value) {
-    currentExpression += value;
-    resultDiv.innerText = currentExpression;
-    lastInputIsOperator = false;
+    // Jika ekspresi saat ini adalah "0" (awal tampilan), ganti dengan input pertama
+    if (currentExpression === "0" && value !== "0") {
+        currentExpression = value;
+    } else {
+        currentExpression += value; // Menambah nilai ke ekspresi
+    }
 
-    showFloatingBalloon(value);
+    resultDiv.innerText = currentExpression;
 }
 
 //Fungsi operand
@@ -22,6 +25,10 @@ function addOperator(operator) {
         lastInputIsOperator = true;
     }
     resultDiv.innerText = currentExpression;
+}
+
+function isOperator(value) {
+    return value === "+" || value === "-" || value === "*" || value === "/";
 }
 
 //Fungsi Kurung
@@ -81,10 +88,10 @@ function calculate() {
 function deleteLast() {
     // Jika ekspresi hanya berisi angka 0 (awal kalkulator), jangan hapus angka 0
     if (currentExpression === "0") {
-        return;
+        return; // Tidak ada yang perlu dihapus
     }
 
-    // Jika ekspresi lebih dari satu karakter, hapus karakter terakhir
+    // Hapus karakter terakhir dari ekspresi
     currentExpression = currentExpression.slice(0, -1);
 
     // Jika ekspresi kosong setelah penghapusan, set tampilan menjadi "0"
